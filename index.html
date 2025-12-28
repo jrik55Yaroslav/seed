@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🎄 Обираємо світ сервера</title>
+<style>
+:root{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --muted:#94a3b8;
+  --text:#e5e7eb;
+  --accent:#facc15;
+  --green:#22c55e;
+  --red:#f87171;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;
+  background:radial-gradient(1200px 600px at 10% -10%, #1b2a4a 0%, transparent 40%),
+             radial-gradient(900px 500px at 110% 10%, #123a2e 0%, transparent 45%),
+             var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* --- Зірочки на фоні --- */
+#starContainer{
+  position:fixed; inset:0; pointer-events:none; z-index:500;
+}
+.star{
+  position:absolute;
+  width:2px; height:2px;
+  background:#fffdd0;
+  border-radius:50%;
+  opacity:0.8;
+  animation:twinkle linear infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:0.2;}
+  50%{opacity:1;}
+}
+
+/* --- Назва з блиском --- */
+header{
+  padding:20px 16px 8px;
+  text-align:center;
+}
+h1{
+  margin:0 0 6px; font-size:1.6rem;
+  background:linear-gradient(90deg, #fde047, #22c55e, #f87171, #fde047);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shine 12s linear infinite;
+}
+@keyframes shine{
+  0%{background-position:0%;}
+  100%{background-position:300%;}
+}
+.sub{color:var(--muted); font-size:.95rem;}
+.counter{
+  margin:10px auto 0;
+  display:inline-flex; gap:8px; align-items:center;
+  background:#0b1224; border:1px solid #223155;
+  padding:6px 10px; border-radius:999px;
+  color:var(--accent); font-weight:600;
+}
+
+/* --- Основний контент --- */
+main{max-width:980px; margin:0 auto; padding:12px;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:12px;
+}
+@media (min-width:900px){
+  .grid{grid-template-columns:repeat(3, minmax(0,1fr));}
+}
+
+/* --- Картки --- */
+.card{
+  background:linear-gradient(180deg, #1f2a44, var(--card));
+  border:1px solid #24345a;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+  position:relative;
+  cursor:pointer;
+  transform:translateY(0);
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.card:hover{transform:translateY(-4px) scale(1.03); box-shadow:0 18px 35px rgba(0,0,0,.35);}
+.card.selected{
+  border-color:var(--green);
+  animation:pulse 0.6s ease-in-out;
+  box-shadow:0 0 15px 5px rgba(34,197,94,0.3);
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,.5);}
+  50%{box-shadow:0 0 20px 10px rgba(34,197,94,.35);}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,.5);}
+}
+
+/* Сніг на верхівці карток */
+.card::before{
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:12px;
+  background:linear-gradient(180deg, #fff 0%, transparent 100%);
+  border-top-left-radius:14px;
+  border-top-right-radius:14px;
+  pointer-events:none;
+  opacity:0.3;
+}
+
+.img{
+  aspect-ratio:16/9; background:#0b1224; overflow:hidden;
+}
+.img img{width:100%; height:100%; object-fit:cover; display:block;}
+.content{padding:10px;}
+.title{font-weight:700;}
+.desc{color:var(--muted); font-size:.85rem; margin-top:4px;}
+.check{
+  position:absolute; top:10px; right:10px;
+  width:28px; height:28px; border-radius:8px;
+  background:#0b1224; border:1px solid #2a3a63;
+  display:grid; place-items:center; color:#9ca3af;
+  font-weight:900;
+  transition:all .3s ease;
+}
+.card.selected .check{
+  background:rgba(34,197,94,.15);
+  border-color:var(--green); color:var(--green);
+}
+
+.nav{
+  display:flex; gap:10px; justify-content:space-between; align-items:center;
+  margin:14px 0 6px;
+}
+button{
+  background:#0b1224; color:var(--text);
+  border:1px solid #24345a; border-radius:10px;
+  padding:10px 14px; cursor:pointer;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+button:hover{transform:scale(1.05); box-shadow:0 5px 15px rgba(0,0,0,.25);}
+button.primary{
+  background:linear-gradient(180deg, #fde047, var(--accent));
+  color:#1f2937; border-color:#fde047; font-weight:800;
+}
+button:disabled{opacity:.5; cursor:not-allowed;}
+
+footer{ text-align:center; color:var(--muted); font-size:.8rem; padding:8px 0 16px; }
+
+/* --- Сніг --- */
+#snowContainer{position:fixed; inset:0; pointer-events:none; z-index:1000;}
+.snowflake{
+position:absolute;
+top:-10px;
+width:4px; height:4px;
+background:#f5fefd;
+border-radius:50%;
+opacity:0.8;
+animation:fall linear infinite;
+}
+@keyframes fall{
+0%{transform:translateY(-10px) translateX(0);}
+100%{transform:translateY(110vh) translateX(var(--x-shift,0));}
+}
+
+/* --- Фінальний блок --- */
+#summary{
+margin-top:24px;
+display:none;
+animation:fadeIn 0.8s ease forwards;
+}
+#summary h2{color:var(--accent); text-align:center; margin-bottom:12px;}
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+.summary-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+@media(min-width:900px){
+.summary-grid{grid-template-columns:repeat(3,1fr);}
+}
+.summary-card{
+border-radius:12px;
+overflow:hidden;
+border:2px solid var(--green);
+box-shadow:0 8px 20px rgba(0,0,0,.3);
+transition:transform .3s ease;
+}
+.summary-card img{width:100%; height:100%; object-fit:cover;}
+.summary-card:hover{transform:scale(1.05);}
+</style>
+</head>
+<body>
+
+<div id="starContainer"></div>
+<div id="snowContainer"></div>
+
+<header>
+  <h1>🎄 Обираємо світ для нашого сервера</h1>
+  <div class="sub">Обери <b>ДО 7</b> сідів, які тобі подобаються (можна менше)</div>
+  <div class="counter">Обрано: <span id="count">0</span> / 7</div>
+</header>
+
+<main>
+  <div id="grid" class="grid"></div>
+
+  <div class="nav">
+    <button id="prev">← Назад</button>
+    <div class="sub">Сторінка <span id="page">1</span> / <span id="pages">1</span></div>
+    <button id="next" class="primary">Далі → 🎁</button>
+  </div>
+
+  <div id="summary">
+    <h2>Твій топ обраних сідів 🎆</h2>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div style="text-align:center; margin-top:12px;">
+      <button id="confirmBtn" class="primary">Підтвердити вибір ✅</button>
+    </div>
+  </div>
+</main>
+
+<footer>Після цього етапу зробите фінальний вибір з обраних варіантів 🎆</footer>
+
+<script>
+// Дані
+const MAX_SELECT = 7;
+const PER_PAGE = 6;
+const SEEDS = Array.from({length:19}, (_,i)=>({
+  id:i+1,
+  title:`Сід #${i+1}`,
+  desc:``,
+  img:`images/seed${i+1}.jpg`
+}));
+
+let page = 0;
+const selected = new Set();
+
+const grid = document.getElementById('grid');
+const countEl = document.getElementById('count');
+const pageEl = document.getElementById('page');
+const pagesEl = document.getElementById('pages');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const summary = document.getElementById('summary');
+const summaryGrid = document.getElementById('summaryGrid');
+const confirmBtn = document.getElementById('confirmBtn');
+
+const totalPages = Math.ceil(SEEDS.length / PER_PAGE);
+pagesEl.textContent = totalPages;
+
+// Відображення карток
+function render(){
+  grid.innerHTML = '';
+  const start = page * PER_PAGE;
+  const slice = SEEDS.slice(start, start + PER_PAGE);
+
+  slice.forEach(seed=>{
+    const card = document.createElement('div');
+    card.className = 'card' + (selected.has(seed.id) ? ' selected' : '');
+    card.innerHTML = `
+      <div class="img"><img src="${seed.img}" alt="${seed.title}"></div>
+      <div class="content">
+        <div class="title">${seed.title}</div>
+        <div class="desc">${seed.desc}</div>
+      </div>
+      <div class="check">✓</div>
+    `;
+    card.onclick = () => toggle(seed.id, card);
+    grid.appendChild(card);
+    card.style.opacity = 0;
+    card.style.transform = 'translateY(20px)';
+    setTimeout(()=>{card.style.transition='all .5s ease'; card.style.opacity=1; card.style.transform='translateY(0)';}, 50);
+  });
+
+  pageEl.textContent = page + 1;
+  prevBtn.disabled = page === 0;
+  nextBtn.disabled = page === totalPages - 1;
+  countEl.textContent = selected.size;
+}
+
+// Вибір картки
+function toggle(id, card){
+  if(selected.has(id)){
+    selected.delete(id);
+    card.classList.remove('selected');
+  } else {
+    if(selected.size >= MAX_SELECT) return;
+    selected.add(id);
+    card.classList.add('selected');
+  }
+  countEl.textContent = selected.size;
+}
+
+prevBtn.onclick = ()=>{ if(page>0){ page--; render(); } };
+nextBtn.onclick = ()=>{
+  if(page<totalPages-1){ page++; render(); } else { showSummary(); }
+};
+
+// Показ фінального вибору
+function showSummary(){
+  grid.style.display = 'none';
+  document.querySelector('.nav').style.display = 'none';
+  summary.style.display = 'block';
+  summaryGrid.innerHTML = '';
+  SEEDS.filter(seed=>selected.has(seed.id)).forEach(seed=>{
+    const card = document.createElement('div');
+    card.className='summary-card';
+    card.innerHTML=`<img src="${seed.img}" alt="${seed.title}">`;
+    summaryGrid.appendChild(card);
+  });
+}
+
+// Підтвердження
+confirmBtn.onclick = ()=>{
+  alert("Твій вибір підтверджено! 🎉");
+}
+
+render();
+
+// Сніг
+const snowContainer = document.getElementById('snowContainer');
+for(let i=0;i<50;i++){
+  const flake = document.createElement('div');
+  flake.className='snowflake';
+  const size = Math.random()*3+2;
+  flake.style.width = flake.style.height = size+'px';
+  flake.style.left = Math.random()*100+'vw';
+  flake.style.animationDuration = (10+Math.random()*10)+'s';
+  flake.style.animationDelay = Math.random()*10+'s';
+  flake.style.setProperty('--x-shift', `${(Math.random()*30-15)}px`);
+  flake.style.animationName='fall, flicker';
+  flake.style.animationTimingFunction='linear, ease-in-out';
+  flake.style.animationIterationCount='infinite';
+  flake.style.animationDuration=`${10+Math.random()*10}s, ${1+Math.random()*2}s`;
+  snowContainer.appendChild(flake);
+}
+
+// Мерехтіння снігу
+const style = document.createElement('style');
+style.innerHTML=`
+@keyframes flicker {
+  0%,100%{opacity:0.6;}
+  50%{opacity:1;}
+}`;
+document.head.appendChild(style);
+
+// Зірочки
+const starContainer = document.getElementById('starContainer');
+for(let i=0;i<30;i++){
+  const star = document.createElement('div');
+  star.className='star';
+  star.style.left = Math.random()*100+'vw';
+  star.style.top = Math.random()*100+'vh';
+  star.style.width = star.style.height = (Math.random()*2+1)+'px';
+  star.style.animationDuration = (1+Math.random()*2)+'s';
+  starContainer.appendChild(star);
+}
+</script>
+
+</body>
+</html>
